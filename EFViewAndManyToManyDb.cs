@@ -15,6 +15,7 @@ namespace EFViewAndManyToMany
         {
         }
 
+        public virtual DbSet<Author> Author { get; set; }
         public virtual DbSet<Post> Post { get; set; }
         public virtual DbSet<PostView> PostView { get; set; }
         public virtual DbSet<Post_Tag> Post_Tag { get; set; }
@@ -31,6 +32,15 @@ namespace EFViewAndManyToMany
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Post>(entity =>
+            {
+                entity.HasOne(d => d.Author)
+                    .WithMany(p => p.Post)
+                    .HasForeignKey(d => d.AuthorId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Post_Author");
+            });
+
             modelBuilder.Entity<PostView>(entity =>
             {
                 entity.HasNoKey();
