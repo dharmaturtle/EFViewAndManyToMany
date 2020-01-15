@@ -16,6 +16,7 @@ namespace EFViewAndManyToMany
         }
 
         public virtual DbSet<Post> Post { get; set; }
+        public virtual DbSet<PostView> PostView { get; set; }
         public virtual DbSet<Post_Tag> Post_Tag { get; set; }
         public virtual DbSet<Tag> Tag { get; set; }
 
@@ -30,6 +31,15 @@ namespace EFViewAndManyToMany
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<PostView>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("PostView");
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+            });
+
             modelBuilder.Entity<Post_Tag>(entity =>
             {
                 entity.HasNoKey();
