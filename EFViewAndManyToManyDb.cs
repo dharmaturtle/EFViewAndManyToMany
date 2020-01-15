@@ -65,6 +65,12 @@ namespace EFViewAndManyToMany
             {
                 entity.HasKey(e => new { e.PostId, e.TagId });
 
+                entity.HasOne(d => d.Post)
+                    .WithMany(p => p.Post_Tag)
+                    .HasForeignKey(d => d.PostId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Post_Tag_Post");
+
                 entity.HasOne(d => d.Tag)
                     .WithMany(p => p.Post_Tag)
                     .HasForeignKey(d => d.TagId)
