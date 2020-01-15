@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using Xunit;
@@ -7,7 +8,7 @@ namespace EFViewAndManyToMany {
     [Fact]
     public void Test1() {
       var context = new EFViewAndManyToManyDb();
-      context.PostView.ToList();
+      Console.WriteLine(context.PostView.Include(x => x.Author).Single().Author.Name); ;
     }
   }
 }
