@@ -54,11 +54,13 @@ namespace EFViewAndManyToMany
 
             modelBuilder.Entity<PostView>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToView("PostView");
 
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+                entity.HasMany(d => d.Post_Tag)
+                    .WithOne()
+                    .HasForeignKey(x => x.PostId);
             });
 
             modelBuilder.Entity<Post_Tag>(entity =>

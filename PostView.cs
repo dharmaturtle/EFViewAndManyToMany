@@ -14,5 +14,5 @@ namespace EFViewAndManyToMany
 
         public virtual Author Author { get; set; }
         public virtual ICollection<Post_Tag> Post_Tag { get; set; }
-  }
+    }
 }
