@@ -32,8 +32,19 @@ namespace EFViewAndManyToMany
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Author>(entity =>
+            {
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50);
+            });
+
             modelBuilder.Entity<Post>(entity =>
             {
+                entity.Property(e => e.Content)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
                 entity.HasOne(d => d.Author)
                     .WithMany(p => p.Post)
                     .HasForeignKey(d => d.AuthorId)
@@ -59,6 +70,13 @@ namespace EFViewAndManyToMany
                     .HasForeignKey(d => d.TagId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Post_Tag_Tag");
+            });
+
+            modelBuilder.Entity<Tag>(entity =>
+            {
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50);
             });
 
             OnModelCreatingPartial(modelBuilder);

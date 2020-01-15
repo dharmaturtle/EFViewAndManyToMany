@@ -7,6 +7,7 @@ namespace EFViewAndManyToMany
     {
         public int Id { get; set; }
         public int AuthorId { get; set; }
+        public string Content { get; set; }
 
         public virtual Author Author { get; set; }
     }
