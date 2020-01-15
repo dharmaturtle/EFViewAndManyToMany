@@ -52,7 +52,7 @@ namespace EFViewAndManyToMany
 
             modelBuilder.Entity<Post_Tag>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => new { e.PostId, e.TagId });
 
                 entity.HasOne(d => d.Tag)
                     .WithMany(p => p.Post_Tag)
