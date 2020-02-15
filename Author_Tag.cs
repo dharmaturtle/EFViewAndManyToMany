@@ -11,5 +11,7 @@ namespace EFViewAndManyToMany
 
         public virtual Author Author { get; set; }
         public virtual Tag Tag { get; set; }
+
+        //public virtual PostView PostView { get; set; }
     }
 }

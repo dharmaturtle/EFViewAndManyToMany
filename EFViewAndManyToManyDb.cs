@@ -55,6 +55,8 @@ namespace EFViewAndManyToMany
                     .HasForeignKey(d => d.TagId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Author_Tag_Tag");
+
+                //entity.HasOne(x => x.PostView).WithMany(x => x.Author_Tag).HasForeignKey(x => x.AuthorId).HasPrincipalKey(x => x.AuthorId);
             });
 
             modelBuilder.Entity<Post>(entity =>
@@ -72,13 +74,29 @@ namespace EFViewAndManyToMany
 
             modelBuilder.Entity<PostView>(entity =>
             {
-                entity.ToView("PostView");
-
-                entity.Property(e => e.Id).ValueGeneratedOnAdd();
-
                 entity.HasMany(d => d.Post_Tag)
                     .WithOne()
                     .HasForeignKey(x => x.PostId);
+                
+                entity.HasMany(d => d.Author_Tag)
+                    .WithOne()
+                    .HasForeignKey(x => x.AuthorId)
+                    .HasPrincipalKey(x => x.AuthorId);
+                /* without HasPrincipalKey it joins on PostView.PostId = AuthorId:
+                   SELECT [p].[Id], [p].[AuthorId], [a].[AuthorId], [a].[TagId]
+                   FROM [PostView] AS [p]
+                   LEFT JOIN [Author_Tag] AS [a] ON [p].[Id] = [a].[AuthorId]
+
+                   But *with* HasPrincipalKey it SELECTS a nonexisting column, AuthorId1
+                   SELECT [p].[Id], [p].[AuthorId], [p].[AuthorId1], [a].[AuthorId], [a].[TagId]
+                   FROM [PostView] AS [p]
+                   LEFT JOIN [Author_Tag] AS [a] ON [p].[AuthorId] = [a].[AuthorId]
+                   ORDER BY [p].[Id], [a].[AuthorId], [a].[TagId]
+                 */
+
+                entity.ToView("PostView");
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
             });
 
             modelBuilder.Entity<Post_Tag>(entity =>
