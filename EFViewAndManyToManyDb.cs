@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -16,6 +16,7 @@ namespace EFViewAndManyToMany
         }
 
         public virtual DbSet<Author> Author { get; set; }
+        public virtual DbSet<Author_Tag> Author_Tag { get; set; }
         public virtual DbSet<Post> Post { get; set; }
         public virtual DbSet<PostView> PostView { get; set; }
         public virtual DbSet<Post_Tag> Post_Tag { get; set; }
@@ -37,6 +38,23 @@ namespace EFViewAndManyToMany
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Author_Tag>(entity =>
+            {
+                entity.HasKey(e => new { e.AuthorId, e.TagId });
+
+                entity.HasOne(d => d.Author)
+                    .WithMany(p => p.Author_Tag)
+                    .HasForeignKey(d => d.AuthorId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Author_Tag_Author");
+
+                entity.HasOne(d => d.Tag)
+                    .WithMany(p => p.Author_Tag)
+                    .HasForeignKey(d => d.TagId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Author_Tag_Tag");
             });
 
             modelBuilder.Entity<Post>(entity =>

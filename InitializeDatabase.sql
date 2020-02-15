@@ -1,4 +1,4 @@
-﻿USE [master]
+USE [master]
 GO
 /****** Object:  Database [EFViewAndManyToMany]    Script Date: 1/14/2020 20:31:21 ******/
 CREATE DATABASE [EFViewAndManyToMany]
@@ -135,7 +135,22 @@ CREATE TABLE [dbo].[Author](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Post_Tag]    Script Date: 1/14/2020 20:31:22 ******/
+/****** Object:  Table [dbo].[Author_Tag]    Script Date: 2/14/2020 21:47:50 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Author_Tag](
+	[AuthorId] [int] NOT NULL,
+	[TagId] [int] NOT NULL,
+ CONSTRAINT [PK_Author_Tag] PRIMARY KEY CLUSTERED 
+(
+	[AuthorId] ASC,
+	[TagId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Post_Tag]    Script Date: 2/14/2020 21:47:50 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -177,6 +192,16 @@ SET IDENTITY_INSERT [dbo].[Tag] ON
 
 INSERT [dbo].[Tag] ([Id], [Name]) VALUES (1, N'Tag')
 SET IDENTITY_INSERT [dbo].[Tag] OFF
+ALTER TABLE [dbo].[Author_Tag]  WITH CHECK ADD  CONSTRAINT [FK_Author_Tag_Author] FOREIGN KEY([AuthorId])
+REFERENCES [dbo].[Author] ([Id])
+GO
+ALTER TABLE [dbo].[Author_Tag] CHECK CONSTRAINT [FK_Author_Tag_Author]
+GO
+ALTER TABLE [dbo].[Author_Tag]  WITH CHECK ADD  CONSTRAINT [FK_Author_Tag_Tag] FOREIGN KEY([TagId])
+REFERENCES [dbo].[Tag] ([Id])
+GO
+ALTER TABLE [dbo].[Author_Tag] CHECK CONSTRAINT [FK_Author_Tag_Tag]
+GO
 ALTER TABLE [dbo].[Post]  WITH CHECK ADD  CONSTRAINT [FK_Post_Author] FOREIGN KEY([AuthorId])
 REFERENCES [dbo].[Author] ([Id])
 GO
