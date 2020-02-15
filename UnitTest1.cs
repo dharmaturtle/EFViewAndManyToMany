@@ -27,6 +27,12 @@ namespace EFViewAndManyToMany {
     private static T Private<T>(this object obj, string privateField) => (T) obj?.GetType().GetField(privateField, BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(obj);
   }
 
+  /*
+   * 
+   * Before running tests, first run InitializeDatabase.sql
+   * 
+   */
+
   public class UnitTest1 {
 
     [Fact]
